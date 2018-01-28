@@ -132,7 +132,7 @@ QNetworkReply *HttpKerberosAuth::makeRequest(QNetworkRequest request,
 
             if (gssContext == NULL)
             {
-                (void) gss_release_name(&minorStatus, &targetName);
+                gss_release_name(&minorStatus, &targetName);
                 return reply;
             }
             if (tokenPointer != GSS_C_NO_BUFFER)
@@ -143,7 +143,7 @@ QNetworkReply *HttpKerberosAuth::makeRequest(QNetworkRequest request,
             if (majorStatus != GSS_S_COMPLETE && majorStatus != GSS_S_CONTINUE_NEEDED)
             {
                 printStatus("init context", majorStatus, minorStatus);
-                (void) gss_release_name(&minorStatus, &targetName);
+                gss_release_name(&minorStatus, &targetName);
                 return reply;
             }
             if (sendToken.length != 0)
@@ -173,7 +173,7 @@ QNetworkReply *HttpKerberosAuth::makeRequest(QNetworkRequest request,
                 tokenPointer = &receiveToken;
             }
         } while (majorStatus == GSS_S_CONTINUE_NEEDED);
-        (void) gss_release_name(&minorStatus, &targetName);
+        gss_release_name(&minorStatus, &targetName);
 #endif
     }
     return reply;
